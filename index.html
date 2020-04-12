@@ -7,7 +7,7 @@
     <title>Document</title>
     <script>
         var dir = [] //当前目录
-        var path = "/book/" //资源目录路径
+        var path = "/book/" //目录路径
         window.onload = function () {
             get_Json();
             //添加监听事件
@@ -25,7 +25,7 @@
                         xhr.response.forEach(item => {
                             let li = document.createElement('li')
                             if (item.type == 'file') {
-                                li.innerHTML = `<a href="${path + dir.join('/')}/${item.name}">${item.name}</a>`
+                                li.innerHTML = `<a target="_blank" href="${path + dir.join('/')}/${item.name}">${item.name}</a>`
                             } else {
                                 li.innerHTML = item.name
                             }
