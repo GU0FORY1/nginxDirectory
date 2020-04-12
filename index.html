@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        var dir = [] //当前目录
+        var path = "/book/" //资源目录路径
+        window.onload = function () {
+            get_Json();
+            //添加监听事件
+            document.getElementById('list').addEventListener('click', li_Click)
+            document.getElementById('tip').addEventListener('click', tip_Click)
+        }
+        function get_Json() {
+            let xhr = new XMLHttpRequest()
+            xhr.responseType = 'json'
+            xhr.open('get', path + dir.join('/'), true)
+            xhr.send()
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {// 4 = "loaded"
+                    if (xhr.status == 200) {// 200 = "OK"
+                        xhr.response.forEach(item => {
+                            let li = document.createElement('li')
+                            if (item.type == 'file') {
+                                li.innerHTML = `<a href="${path + dir.join('/')}/${item.name}">${item.name}</a>`
+                            } else {
+                                li.innerHTML = item.name
+                            }
+                            li.setAttribute('type', item.type)
+                            li.setAttribute('name', item.name)
+                            document.getElementById('list').appendChild(li);
+                        });
+                    }
+                }
+            }
+        }
+
+        function li_Click(e) {
+            let type = e.target.getAttribute('type')
+            let name = e.target.getAttribute('name')
+            if (type && type == 'directory') {
+                dir.push(name)
+                let ele = `<strong>主页/</strong>`
+                dir.forEach(item => {
+                    ele = ele + `<strong name="${item}">${item}/</strong>`
+                })
+                document.getElementById('list').innerHTML = ""
+                document.getElementById('tip').innerHTML = ele
+                get_Json();
+            }
+        }
+        function tip_Click(e) {
+            let name = e.target.getAttribute('name')
+            dir.splice(dir.indexOf(name) + 1)
+            let ele = `<strong>主页/</strong>`
+            dir.forEach(item => {
+                ele = ele + `<strong name="${item}">${item}/</strong>`
+            })
+            document.getElementById('list').innerHTML = ""
+            document.getElementById('tip').innerHTML = ele
+            get_Json();
+        }
+
+    </script>
+    <style>
+        body {
+            cursor: pointer;
+        }
+        ul {
+        	list-style-type: square;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="tip"><strong>主页/</strong></div>
+    <ul id="list">
+    </ul>
+</body>
+
+</html>
