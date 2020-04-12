@@ -1,5 +1,7 @@
+解析nginx返回的目录浏览json数据，重新渲染生成
+为了解决，nginx原生目录浏览名称长度的问题
+代码较为烂，凑合用
 ## nginx配置
-
 
 ```
 location   /book {
